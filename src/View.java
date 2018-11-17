@@ -88,6 +88,12 @@ public class View extends JFrame implements KeyListener, ActionListener  {
         message = "";
     }
 
+    private void minus() {
+        calculator.setFirstTerm(message);
+        calculator.setOperator("-");
+        message = "";
+    }
+
     private void times() {
         calculator.setFirstTerm(message);
         calculator.setOperator("x");
@@ -108,6 +114,7 @@ public class View extends JFrame implements KeyListener, ActionListener  {
         if (!operator.equals("")) {
             switch (operator) {
                 case "+": message = calculator.sum(); break;
+                case "-": message = calculator.subtraction(); break;
                 case "x": message = calculator.product(); break;
             }
             updateScreen();
@@ -136,9 +143,7 @@ public class View extends JFrame implements KeyListener, ActionListener  {
         } else if (code == KeyEvent.VK_PLUS) {
             plus();
         } else if (code == KeyEvent.VK_MINUS) {
-            calculator.setFirstTerm(message);
-            calculator.setOperator("-");
-            message = "0";
+            minus();
         } else if (code == KeyEvent.VK_X || code == KeyEvent.VK_ASTERISK) {
             times();
         } else if (code == KeyEvent.VK_SLASH) {
@@ -163,6 +168,8 @@ public class View extends JFrame implements KeyListener, ActionListener  {
             zero();
         } else if (command.equals("+")) {
             plus();
+        } else if (command.equals("-")) {
+            minus();
         } else if (command.equals("x")){
             times();
         } else if (command.equals("=")) {

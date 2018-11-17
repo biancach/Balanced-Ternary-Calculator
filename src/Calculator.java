@@ -199,4 +199,8 @@ public class Calculator {
     public String product() {
         return product(firstTerm, secondTerm);
     }
+
+    public String subtraction() {
+        return sum(firstTerm, flip(secondTerm));
+    }
 }
