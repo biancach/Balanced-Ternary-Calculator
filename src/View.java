@@ -4,8 +4,8 @@ import javax.swing.*;
 
 public class View extends JFrame implements KeyListener, ActionListener  {
 
-    private JPanel mainPanel;
-    private JButton up, down, zero, clear, plus, times, minus, divide, equal, convert;
+    private JPanel mainPanel, ternaryPanel, baseTenPanel;
+    private JButton up, down, zero, clear, plus, times, minus, divide, equal, convertToBaseTen, changeBase;
     private JLabel screen_message;
     private String message = "";
     private Calculator calculator = new Calculator();
@@ -13,7 +13,15 @@ public class View extends JFrame implements KeyListener, ActionListener  {
     public View() {
         super("Balanced Ternary");
         mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayout(4, 1));
+        mainPanel.setLayout(new CardLayout());
+
+        ternaryPanel = new JPanel();
+        ternaryPanel.setLayout(new GridLayout(5, 1));
+        mainPanel.add(ternaryPanel);
+        baseTenPanel = new JPanel();
+        baseTenPanel.setLayout(new GridLayout(4, 1));
+        mainPanel.add(baseTenPanel);
+
         this.setContentPane(mainPanel);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setFocusable(true);
@@ -21,25 +29,29 @@ public class View extends JFrame implements KeyListener, ActionListener  {
 
         JPanel answerPanel = new JPanel();
         answerPanel.setLayout(new BorderLayout());
-        mainPanel.add(answerPanel);
+        ternaryPanel.add(answerPanel);
         screen_message = new JLabel(message);
         answerPanel.add(screen_message, BorderLayout.EAST);
 
         JPanel digitPanel = new JPanel();
         digitPanel.setLayout(new GridLayout(1, 4));
         digitPanel.setBackground(Color.GRAY);
-        mainPanel.add(digitPanel);
+        ternaryPanel.add(digitPanel);
 
         JPanel operatorPanel = new JPanel();
         operatorPanel.setLayout(new GridLayout(1, 4));
         operatorPanel.setBackground(Color.GRAY);
-        mainPanel.add(operatorPanel);
+        ternaryPanel.add(operatorPanel);
 
         JPanel equalPanel = new JPanel();
-        equalPanel.setLayout(new GridLayout(2, 1));
+        equalPanel.setLayout(new GridLayout(1, 1));
         equalPanel.setBackground(Color.GRAY);
-        mainPanel.add(equalPanel);
+        ternaryPanel.add(equalPanel);
 
+        JPanel convertPanel = new JPanel();
+        convertPanel.setLayout(new GridLayout(1, 2));
+        convertPanel.setBackground(Color.GRAY);
+        ternaryPanel.add(convertPanel);
 
         up = new JButton("^");
         down = new JButton("v");
@@ -61,8 +73,10 @@ public class View extends JFrame implements KeyListener, ActionListener  {
 
         equal = new JButton("=");
         equalPanel.add(equal);
-        convert = new JButton("convert to base 10");
-        equalPanel.add(convert);
+        convertToBaseTen = new JButton("convert to base 10");
+        convertPanel.add(convertToBaseTen);
+        changeBase = new JButton("change base");
+        convertPanel.add(changeBase);
 
         addActionListener(this);
     }
@@ -164,7 +178,9 @@ public class View extends JFrame implements KeyListener, ActionListener  {
     @Override
     public void actionPerformed(ActionEvent evt) {
         String command = evt.getActionCommand();
-        if (command.equals("^")) {
+        if (command.equals("C")) {
+            clear();
+        } else if (command.equals("^")) {
             up();
         } else if (command.equals("v")) {
             down();
@@ -210,7 +226,8 @@ public class View extends JFrame implements KeyListener, ActionListener  {
         minus.addActionListener(listener);
         divide.addActionListener(listener);
         equal.addActionListener(listener);
-        convert.addActionListener(listener);
+        convertToBaseTen.addActionListener(listener);
+        changeBase.addActionListener(listener);
     }
 
     public void updateScreen() {
@@ -218,7 +235,11 @@ public class View extends JFrame implements KeyListener, ActionListener  {
         screen_message.requestFocus();
         screen_message.updateUI();
         mainPanel.updateUI();
+        ternaryPanel.updateUI();
+        baseTenPanel.updateUI();
         mainPanel.repaint();
+        ternaryPanel.repaint();
+        baseTenPanel.repaint();
         this.requestFocus();
         this.repaint();
     }
