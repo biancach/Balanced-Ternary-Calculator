@@ -6,9 +6,17 @@ public class Main {
     public static void main(String[] args) {
         Calculator test = new Calculator();
 //        String num1 = "^^v^0000", num2 = "0v0vv";
-//        String num1 = "v^00^", num2 = "vv^^v0v0vv";
-//        System.out.println(test.convertToBaseTen(num1));
-//        System.out.println(test.convertToBaseTen(num2));
+        String num1 = "v^00^", num2 = "vv^^v0v0vv";
+
+        String num1b10 = test.convertToBaseTen(num1);
+        String num2b10 = test.convertToBaseTen(num2);
+
+        System.out.println(test.convertToBaseTen(num1));
+        System.out.println(test.convertToBaseTen(num2));
+
+        System.out.println(test.convertToBalancedTernary(num1b10));
+        System.out.println(test.convertToBalancedTernary(num2b10));
+
 //        System.out.println(test.flip(num1));
 //        System.out.println(test.sum(test.flip(num2), num2));
 //        System.out.println(test.sum(num1, num2));

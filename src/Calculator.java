@@ -4,21 +4,85 @@ public class Calculator {
     private String firstTerm = "";
     private String secondTerm = "";
 
-    public int convertToBaseTen(String a) {
-        int answer = 0;
-        int place = 0;
-        while (a.length() > 0) {
-            int dig;
-            switch (a.charAt(a.length() - 1)) {
-                case '^' : dig = 1; break;
-                case 'v': dig = -1; break;
-                default: dig = 0;
+    public boolean isBalancedTernary = true;
+
+    public String convertToBaseTen(String a) {
+//        if (isBalancedTernary) {
+//            isBalancedTernary = false;
+            int answer = 0;
+            int place = 0;
+            while (a.length() > 0) {
+                int digit;
+                switch (a.charAt(a.length() - 1)) {
+                    case '^':
+                        digit = 1;
+                        break;
+                    case 'v':
+                        digit = -1;
+                        break;
+                    default:
+                        digit = 0;
+                }
+                answer += digit * (int) Math.pow(3, place);
+                place += 1;
+                a = a.substring(0, a.length() - 1);
             }
-            answer += dig * (int) Math.pow(3, place);
-            place += 1;
-            a = a.substring(0, a.length() - 1);
+            isBalancedTernary = false;
+            return String.valueOf(answer);
+//        }
+//        throw new IllegalAccessError("shouldn't convert base 10 to base 10");
+    }
+
+    public String convertToBalancedTernary (String a) {
+//        if (!isBalancedTernary) {
+            int b10 = Integer.valueOf(a);
+            isBalancedTernary = true;
+            return recursiveConversion(b10);
+//        }
+//        throw new IllegalAccessError("shouldn't convert balanced ternary to balanced ternary");
+    }
+
+    private String recursiveConversion(int num) {
+        int digits = 1;
+        int counter = 1;
+        int absNum = Math.abs(num);
+
+        while (absNum > counter) {
+            counter += Math.pow(3, digits);
+            digits += 1;
         }
-        return answer;
+
+        String numToReturn = "";
+
+        if (digits == 1) {
+            if (num == 0) {
+                return "0";
+            } else if (num > 0) {
+                return "^";
+            } else {
+                return "v";
+            }
+        } else {
+            for (int i = 1; i < digits; i++) {
+                numToReturn += "0";
+            }
+        }
+
+        int numToSubtract;
+        if (num > 0) {
+            numToReturn = "^" + numToReturn;
+            numToSubtract = (int) Math.pow(3, digits - 1);
+
+        } else {
+            numToReturn = "v" + numToReturn;
+            numToSubtract = (int) (-1 * Math.pow(3, digits - 1));
+        }
+
+        if (digits > 1) {
+            return sum(numToReturn, recursiveConversion(num - numToSubtract));
+        } else {
+            return numToReturn;
+        }
     }
 
     public String sum(String a, String b) {

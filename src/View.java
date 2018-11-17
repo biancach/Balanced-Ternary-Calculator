@@ -125,10 +125,14 @@ public class View extends JFrame implements KeyListener, ActionListener  {
         }
     }
 
-    private void convert() {
+    private void convertToBaseTen() {
         message = "" + calculator.convertToBaseTen(message);
         updateScreen();
-        message = "";
+    }
+
+    private void convertToBalancedTernary() {
+        message = "" + calculator.convertToBalancedTernary(message);
+        updateScreen();
     }
 
     @Override
@@ -175,7 +179,12 @@ public class View extends JFrame implements KeyListener, ActionListener  {
         } else if (command.equals("=")) {
             equals();
         } else if (command.equals("convert to base 10")) {
-            convert();
+            if (calculator.isBalancedTernary) {
+                convertToBaseTen();
+            } else {
+                convertToBalancedTernary();
+            }
+
         }
     }
 
