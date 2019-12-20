@@ -1,10 +1,18 @@
+import java.util.HashMap;
+import java.util.Map;
+
 public class Calculator {
 
-    private String operator = "";
-    private String firstTerm = "";
-    private String secondTerm = "";
-
     public boolean isBalancedTernary = true;
+
+    private Map<Character, Integer> charToValMap = new HashMap<Character, Integer>(){
+        {
+            put('^', 1);
+            put('v', -1);
+            put('0', 0);
+        }
+    };
+
 
     public String convertToBaseTen(String a) {
 //        if (isBalancedTernary) {
@@ -200,6 +208,10 @@ public class Calculator {
         }
     }
 
+    public String difference(String a, String b) {
+        return removeLeadingZeros(sum(a, flip(b)));
+    }
+
     public String product(String a, String b) {
         String answer = "0";
         while (a.length() > 0) {
@@ -212,6 +224,57 @@ public class Calculator {
         }
         return answer;
     }
+
+    public String quotient(String a, String b) {
+        boolean invert = false;
+        if (!isPositive(a)) {
+            if (!isPositive(b)) {
+                a = flip(a);
+                b = flip(b);
+            } else {
+                invert = true;
+                a = flip(a);
+            }
+        } else if (!isPositive(b)) {
+            invert = true;
+            b = flip(b);
+        }
+
+        String answer = quotientHelper(a, b, "", 0);
+        if (answer.length() == 0) {
+            answer = "0";
+        }
+
+        if (invert) {
+            return flip(answer);
+        } else {
+            return answer;
+        }
+    }
+
+    private String quotientHelper(String a, String b, String answer, int idx) {
+        if (b.length() + idx > a.length()) {
+            return answer;
+        } else if (a.equals("0")) {
+            return answer;
+        } else {
+            String front = a.substring(0, b.length() + idx);
+            if (isGreaterOrEqual(front, b)) {
+                a = difference(front, b) + a.substring(b.length());
+                answer += "^";
+                return quotientHelper(a, b, answer, idx);
+            } else if (isGreaterOrEqual(flip(front), b)) {
+                a = difference(flip(front), b) + a.substring(b.length());
+                answer += "v";
+                return quotientHelper(a, b, answer, idx);
+            } else {
+//                a = a.substring(1);
+                answer += "0";
+                return quotientHelper(a, b, answer, idx + 1);
+            }
+        }
+    }
+
 
     public String flip(String a) {
         String flipped = "";
@@ -232,39 +295,35 @@ public class Calculator {
         return a;
     }
 
-    public void setOperator(String operator) {
-        this.operator = operator;
+    private boolean isPositive(String a) {
+        return isGreaterOrEqual(a,"0");
     }
 
-    public void setFirstTerm(String firstTerm) {
-        this.firstTerm = firstTerm;
+    private boolean isGreaterOrEqual(String a, String b) {
+        a = removeLeadingZeros(a);
+        b = removeLeadingZeros(b);
+        return isGreaterOrEqualHelper(a, b);
     }
 
-    public void setSecondTerm(String secondTerm) {
-        this.secondTerm = secondTerm;
+    private boolean isGreaterOrEqualHelper(String a, String b) {
+        if (a.length() == 0) {
+            if (b.length() == 0) {
+                return true;
+            } else {
+                return charToValMap.get(b.charAt(0)) <= 0;
+            }
+        } else if (b.length() == 0) {
+            return charToValMap.get(a.charAt(0)) >= 0;
+        }
+
+        int aVal = charToValMap.get(a.charAt(0));
+        int bVal = charToValMap.get(b.charAt(0));
+        if (aVal == bVal) {
+            return isGreaterOrEqual(a.substring(1), b.substring(1));
+        } else {
+            return aVal > bVal;
+        }
+
     }
 
-    public String getOperator() {
-        return operator;
-    }
-
-    public String getFirstTerm() {
-        return firstTerm;
-    }
-
-    public String getSecondTerm() {
-        return secondTerm;
-    }
-
-    public String sum() {
-        return sum(firstTerm, secondTerm);
-    }
-
-    public String product() {
-        return product(firstTerm, secondTerm);
-    }
-
-    public String subtraction() {
-        return sum(firstTerm, flip(secondTerm));
-    }
 }

@@ -5,10 +5,13 @@ import javax.swing.*;
 public class View extends JFrame implements KeyListener, ActionListener  {
 
     private JPanel mainPanel, ternaryPanel, baseTenPanel;
-    private JButton up, down, zero, clear, plus, times, minus, divide, equal, convertToBaseTen, changeBase;
+    private JButton up, down, zero, clear, plus, times, minus, divide, equal, convertToBaseTen, convertToTernary;
     private JLabel screen_message;
-    private String message = "";
+    private String message = "", ternary = "";
     private Calculator calculator = new Calculator();
+    private String operator = "";
+    private String firstTerm = "";
+    private String secondTerm = "";
 
     public View() {
         super("Balanced Ternary");
@@ -75,8 +78,8 @@ public class View extends JFrame implements KeyListener, ActionListener  {
         equalPanel.add(equal);
         convertToBaseTen = new JButton("convert to base 10");
         convertPanel.add(convertToBaseTen);
-        changeBase = new JButton("change base");
-        convertPanel.add(changeBase);
+        convertToTernary = new JButton("convert to ternary");
+        convertPanel.add(convertToTernary);
 
         addActionListener(this);
     }
@@ -97,44 +100,48 @@ public class View extends JFrame implements KeyListener, ActionListener  {
     }
 
     private void plus() {
-        calculator.setFirstTerm(message);
-        calculator.setOperator("+");
+        firstTerm = message;
+        operator = "+";
         message = "";
     }
 
     private void minus() {
-        calculator.setFirstTerm(message);
-        calculator.setOperator("-");
+        firstTerm = message;
+        operator = "-";
         message = "";
     }
 
     private void times() {
-        calculator.setFirstTerm(message);
-        calculator.setOperator("x");
+        firstTerm = message;
+        operator = "x";
         message = "";
     }
 
+    private void divide() {
+        firstTerm = message;
+        operator = "/";
+        message = "";
+
+    }
     private void clear() {
         message = "0";
-        calculator.setFirstTerm("");
-        calculator.setSecondTerm("");
-        calculator.setOperator("");
+        firstTerm = "";
+        secondTerm = "";
+        operator = "";
         updateScreen();
     }
 
     private void equals() {
-        calculator.setSecondTerm(message);
-        String operator = calculator.getOperator();
+        secondTerm = message;
         if (!operator.equals("")) {
             switch (operator) {
-                case "+": message = calculator.sum(); break;
-                case "-": message = calculator.subtraction(); break;
-                case "x": message = calculator.product(); break;
+                case "+": message = calculator.sum(firstTerm, secondTerm); break;
+                case "-": message = calculator.difference(firstTerm, secondTerm); break;
+                case "x": message = calculator.product(firstTerm, secondTerm); break;
             }
             updateScreen();
-            calculator.setFirstTerm(message);
-            calculator.setSecondTerm("");
-            calculator.setOperator("");
+            firstTerm = message;
+            secondTerm = "";
             message = "";
         }
     }
@@ -165,9 +172,7 @@ public class View extends JFrame implements KeyListener, ActionListener  {
         } else if (code == KeyEvent.VK_X || code == KeyEvent.VK_ASTERISK) {
             times();
         } else if (code == KeyEvent.VK_SLASH) {
-            calculator.setFirstTerm(message);
-            calculator.setOperator("/");
-            message = "0";
+//            divide(); // need to implement
         } else if (code == KeyEvent.VK_C) {
             clear();
         } else if (code == KeyEvent.VK_EQUALS) {
@@ -192,7 +197,9 @@ public class View extends JFrame implements KeyListener, ActionListener  {
             minus();
         } else if (command.equals("x")){
             times();
-        } else if (command.equals("=")) {
+        } else if (command.equals("/")){
+//            divide();
+        }else if (command.equals("=")) {
             equals();
         } else if (command.equals("convert to base 10")) {
             if (calculator.isBalancedTernary) {
@@ -227,7 +234,7 @@ public class View extends JFrame implements KeyListener, ActionListener  {
         divide.addActionListener(listener);
         equal.addActionListener(listener);
         convertToBaseTen.addActionListener(listener);
-        changeBase.addActionListener(listener);
+        convertToTernary.addActionListener(listener);
     }
 
     public void updateScreen() {
