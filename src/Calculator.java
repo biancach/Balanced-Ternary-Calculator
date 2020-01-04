@@ -216,54 +216,95 @@ public class Calculator {
     }
 
     public String quotient(String a, String b) {
-        boolean invert = false;
-        if (!isPositive(a)) {
-            if (!isPositive(b)) {
-                a = flip(a);
-                b = flip(b);
-            } else {
-                invert = true;
-                a = flip(a);
-            }
-        } else if (!isPositive(b)) {
-            invert = true;
-            b = flip(b);
-        }
-
-        String answer = quotientHelper(a, b, "", 0);
-        if (answer.length() == 0) {
-            answer = "0";
-        }
-
-        if (invert) {
-            return flip(answer);
-        } else {
-            return answer;
-        }
+        return hackyQuotient(a, b); //replace with realQuotient when ready
     }
 
-    private String quotientHelper(String a, String b, String answer, int idx) {
-        if (b.length() + idx > a.length()) {
-            return answer;
-        } else if (a.equals("0")) {
-            return answer;
+    private String hackyQuotient(String a, String b) {
+        int intA = Integer.valueOf(convertToBaseTen(a));
+        int intB = Integer.valueOf(convertToBaseTen(b));
+        String quotient = String.valueOf(intA / intB);
+        return convertToBalancedTernary(quotient);
+    }
+
+    //this doesn't work yet but I think I'm on the right track
+    private String realQuotient(String a, String b) {
+        if (b.equals("0")) {
+            return "0";
+        }
+
+        if (b.length() > a.length()) {
+            return "0";
         } else {
-            String front = a.substring(0, b.length() + idx);
-            if (isGreaterOrEqual(front, b)) {
-                a = difference(front, b) + a.substring(b.length());
-                answer += "^";
-                return quotientHelper(a, b, answer, idx);
-            } else if (isGreaterOrEqual(flip(front), b)) {
-                a = difference(flip(front), b) + a.substring(b.length());
-                answer += "v";
-                return quotientHelper(a, b, answer, idx);
+            char aStart = a.charAt(0), bStart = b.charAt(0);
+            if (a.length() == b.length()) {
+                if (aStart == '0') {
+                    return "0";
+                } else if (aStart != bStart) {
+                    return "v";
+                } else {
+                    return "^";
+                }
             } else {
-//                a = a.substring(1);
-                answer += "0";
-                return quotientHelper(a, b, answer, idx + 1);
+                if (aStart == '0') {
+                    return "0" + realQuotient(a.substring(1), b);
+                } else if (aStart != bStart) {
+                    return "v" + realQuotient(difference(a, flip(b)), b);
+                } else {
+                    return "^" + realQuotient(difference(a, b), b);
+                }
             }
         }
     }
+
+//    public String quotient(String a, String b) {
+//        boolean invert = false;
+//        if (!isPositive(a)) {
+//            if (!isPositive(b)) {
+//                a = flip(a);
+//                b = flip(b);
+//            } else {
+//                invert = true;
+//                a = flip(a);
+//            }
+//        } else if (!isPositive(b)) {
+//            invert = true;
+//            b = flip(b);
+//        }
+//
+//        String answer = quotientHelper(a, b, "", 0);
+//        if (answer.length() == 0) {
+//            answer = "0";
+//        }
+//
+//        if (invert) {
+//            return flip(answer);
+//        } else {
+//            return answer;
+//        }
+//    }
+//
+//    private String quotientHelper(String a, String b, String answer, int idx) {
+//        if (b.length() + idx > a.length()) {
+//            return answer;
+//        } else if (a.equals("0")) {
+//            return answer;
+//        } else {
+//            String front = a.substring(0, b.length() + idx);
+//            if (isGreaterOrEqual(front, b)) {
+//                a = difference(front, b) + a.substring(b.length());
+//                answer += "^";
+//                return quotientHelper(a, b, answer, idx);
+//            } else if (isGreaterOrEqual(flip(front), b)) {
+//                a = difference(flip(front), b) + a.substring(b.length());
+//                answer += "v";
+//                return quotientHelper(a, b, answer, idx);
+//            } else {
+////                a = a.substring(1);
+//                answer += "0";
+//                return quotientHelper(a, b, answer, idx + 1);
+//            }
+//        }
+//    }
 
 
     public String flip(String a) {

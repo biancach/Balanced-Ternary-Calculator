@@ -7,7 +7,7 @@ public class View extends JFrame implements KeyListener, ActionListener  {
     private JPanel mainPanelTernary, ternaryPanel;
     private JButton up, down, zero, clear, plus, times, minus, divide, equal, convertToBaseTen, convertToTernary;
     private JLabel screen_message, operator_message;
-    private String message = "";
+    private String message = "0";
     private Calculator calculator = new Calculator();
     private String operator = "";
     private String firstTerm = "";
@@ -28,10 +28,10 @@ public class View extends JFrame implements KeyListener, ActionListener  {
         JPanel answerPanel = new JPanel();
         answerPanel.setLayout(new BorderLayout());
         ternaryPanel.add(answerPanel);
-        screen_message = new JLabel(message);
+        screen_message = new JLabel(message + "    ");
         answerPanel.add(screen_message, BorderLayout.EAST);
 
-        operator_message = new JLabel(message);
+        operator_message = new JLabel("");
         answerPanel.add(operator_message, BorderLayout.WEST);
 
         JPanel digitPanel = new JPanel();
@@ -92,17 +92,23 @@ public class View extends JFrame implements KeyListener, ActionListener  {
     }
 
     private void up() {
-        message = message + "^";
-        updateScreen();
+        updateDigit("^");
     }
 
     private void down() {
-        message = message + "v";
-        updateScreen();
+        updateDigit("v");
     }
 
     private void zero() {
-        message = message + "0";
+        updateDigit("0");
+    }
+
+    private void updateDigit(String digit) {
+        if (message.equals("0")) {
+            message = digit;
+        } else {
+            message = message + digit;
+        }
         updateScreen();
     }
 
@@ -131,6 +137,8 @@ public class View extends JFrame implements KeyListener, ActionListener  {
         updateScreen();
     }
 
+    //this is more of an "All Clear"
+    //could convert this to "All clear" and add a "clear" button that only clears the message
     private void clear() {
         message = "0";
         firstTerm = "";
@@ -146,6 +154,7 @@ public class View extends JFrame implements KeyListener, ActionListener  {
                 case "+": message = calculator.sum(firstTerm, secondTerm); break;
                 case "-": message = calculator.difference(firstTerm, secondTerm); break;
                 case "x": message = calculator.product(firstTerm, secondTerm); break;
+                case "/": message = calculator.quotient(firstTerm, secondTerm); break;
             }
             firstTerm = message;
             secondTerm = "";
@@ -198,7 +207,7 @@ public class View extends JFrame implements KeyListener, ActionListener  {
         } else if (code == KeyEvent.VK_X || code == KeyEvent.VK_ASTERISK) {
             times();
         } else if (code == KeyEvent.VK_SLASH) {
-//            divide(); // need to implement
+            divide(); // need to implement
         } else if (code == KeyEvent.VK_C) {
             clear();
         } else if (code == KeyEvent.VK_EQUALS) {
@@ -225,7 +234,7 @@ public class View extends JFrame implements KeyListener, ActionListener  {
             } else if (command.equals("x")) {
                 times();
             } else if (command.equals("/")) {
-                //            divide();
+                divide();
             } else if (command.equals("=")) {
                 equals();
             } else if (command.equals("convert to base 10")) {
