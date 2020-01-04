@@ -155,13 +155,29 @@ public class View extends JFrame implements KeyListener, ActionListener  {
     }
 
     private void convertToBaseTen() {
-        message = "" + calculator.convertToBaseTen(message);
-        updateScreen();
+        if (message.equals("")) {
+            if (!firstTerm.equals("")) {
+                message = "" + calculator.convertToBaseTen(firstTerm);
+                updateScreen();
+                message = "";
+            }
+        } else {
+            message = "" + calculator.convertToBaseTen(message);
+            updateScreen();
+        }
     }
 
     private void convertToBalancedTernary() {
-        message = "" + calculator.convertToBalancedTernary(message);
-        updateScreen();
+        if (message.equals("")) {
+            if (!firstTerm.equals("")) {
+                message = "" + firstTerm;
+                updateScreen();
+                message = "";
+            }
+        } else {
+            message = "" + calculator.convertToBalancedTernary(message);
+            updateScreen();
+        }
     }
 
     @Override
