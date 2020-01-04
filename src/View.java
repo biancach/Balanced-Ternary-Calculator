@@ -277,11 +277,11 @@ public class View extends JFrame implements KeyListener, ActionListener  {
 
     public void updateScreen() {
         this.setTitle("Balanced Ternary Calculator");
-        screen_message.setText(message);
+        screen_message.setText(message + "    ");
         screen_message.requestFocus();
         screen_message.updateUI();
         if (operator != null) {
-            operator_message.setText(firstTerm + " " + operator);
+            operator_message.setText("    " + firstTerm + " " + operator);
         } else {
             operator_message.setText("");
         }
