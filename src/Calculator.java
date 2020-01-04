@@ -20,17 +20,7 @@ public class Calculator {
             int answer = 0;
             int place = 0;
             while (a.length() > 0) {
-                int digit;
-                switch (a.charAt(a.length() - 1)) {
-                    case '^':
-                        digit = 1;
-                        break;
-                    case 'v':
-                        digit = -1;
-                        break;
-                    default:
-                        digit = 0;
-                }
+                int digit = charToValMap.get((a.charAt(a.length() - 1)));
                 answer += digit * (int) Math.pow(3, place);
                 place += 1;
                 a = a.substring(0, a.length() - 1);

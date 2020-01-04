@@ -5,7 +5,7 @@ public class Main {
 
     public static void main(String[] args) {
 //        String num1 = "^^v^0000", num2 = "0v0vv";
-        String num1 = "v^00^", num2 = "vv^^v0v0vv";
+        String num1 = "v^00^", num2 = "vv^^v0v0vv"; //-53, -23602
 
         String num1b10 = cleanConvertToBaseTen(num1);
         String num2b10 = cleanConvertToBaseTen(num2);
