@@ -4,31 +4,26 @@ import javax.swing.*;
 
 public class View extends JFrame implements KeyListener, ActionListener  {
 
-    private JPanel mainPanel, ternaryPanel, baseTenPanel;
+    private JPanel mainPanelTernary, ternaryPanel;
     private JButton up, down, zero, clear, plus, times, minus, divide, equal, convertToBaseTen, convertToTernary;
     private JLabel screen_message, operator_message;
-    private String message = "", ternary = "";
+    private String message = "";
     private Calculator calculator = new Calculator();
     private String operator = "";
     private String firstTerm = "";
     private String secondTerm = "";
 
     public View() {
-        super("Balanced Ternary");
-        mainPanel = new JPanel();
-        mainPanel.setLayout(new CardLayout());
+        super("Balanced Ternary Calculator");
+
+        //balanced ternary display
+
+        mainPanelTernary = new JPanel();
+        mainPanelTernary.setLayout(new CardLayout());
 
         ternaryPanel = new JPanel();
         ternaryPanel.setLayout(new GridLayout(5, 1));
-        mainPanel.add(ternaryPanel);
-//        baseTenPanel = new JPanel();
-//        baseTenPanel.setLayout(new GridLayout(4, 1));
-//        mainPanel.add(baseTenPanel);
-
-        this.setContentPane(mainPanel);
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setFocusable(true);
-        this.setResizable(false);
+        mainPanelTernary.add(ternaryPanel);
 
         JPanel answerPanel = new JPanel();
         answerPanel.setLayout(new BorderLayout());
@@ -84,6 +79,13 @@ public class View extends JFrame implements KeyListener, ActionListener  {
         convertPanel.add(convertToBaseTen);
         convertToTernary = new JButton("convert to ternary");
         convertPanel.add(convertToTernary);
+
+        //final building parts
+
+        this.setContentPane(mainPanelTernary);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setFocusable(true);
+        this.setResizable(false);
 
         addActionListener(this);
     }
@@ -189,31 +191,41 @@ public class View extends JFrame implements KeyListener, ActionListener  {
     @Override
     public void actionPerformed(ActionEvent evt) {
         String command = evt.getActionCommand();
-        if (command.equals("C")) {
-            clear();
-        } else if (command.equals("^")) {
-            up();
-        } else if (command.equals("v")) {
-            down();
-        } else if (command.equals("0")) {
-            zero();
-        } else if (command.equals("+")) {
-            plus();
-        } else if (command.equals("-")) {
-            minus();
-        } else if (command.equals("x")){
-            times();
-        } else if (command.equals("/")){
-//            divide();
-        }else if (command.equals("=")) {
-            equals();
-        } else if (command.equals("convert to base 10")) {
-            if (calculator.isBalancedTernary) {
-                convertToBaseTen();
-            } else {
-                convertToBalancedTernary();
-            }
+        if (calculator.isBalancedTernary) {
+            if (command.equals("C")) {
+                clear();
+            } else if (command.equals("^")) {
+                up();
+            } else if (command.equals("v")) {
+                down();
+            } else if (command.equals("0")) {
+                zero();
+            } else if (command.equals("+")) {
+                plus();
+            } else if (command.equals("-")) {
+                minus();
+            } else if (command.equals("x")) {
+                times();
+            } else if (command.equals("/")) {
+                //            divide();
+            } else if (command.equals("=")) {
+                equals();
+            } else if (command.equals("convert to base 10")) {
+                if (calculator.isBalancedTernary) {
+                    convertToBaseTen();
+                } else {
+                    convertToBalancedTernary();
+                }
 
+            }
+        } else {
+            if (command.equals("convert to base 10")) {
+                if (calculator.isBalancedTernary) {
+                    convertToBaseTen();
+                } else {
+                    convertToBalancedTernary();
+                }
+            }
         }
     }
 
@@ -226,7 +238,7 @@ public class View extends JFrame implements KeyListener, ActionListener  {
     @Override
     public void addKeyListener(KeyListener listener) {
         super.addKeyListener(listener);
-        mainPanel.addKeyListener(listener);
+        mainPanelTernary.addKeyListener(listener);
     }
 
     public void addActionListener(ActionListener listener) {
@@ -244,6 +256,7 @@ public class View extends JFrame implements KeyListener, ActionListener  {
     }
 
     public void updateScreen() {
+        this.setTitle("Balanced Ternary Calculator");
         screen_message.setText(message);
         screen_message.requestFocus();
         screen_message.updateUI();
@@ -253,19 +266,18 @@ public class View extends JFrame implements KeyListener, ActionListener  {
             operator_message.setText("");
         }
         operator_message.updateUI();
-        mainPanel.updateUI();
+        mainPanelTernary.updateUI();
         ternaryPanel.updateUI();
-//        baseTenPanel.updateUI();
-        mainPanel.repaint();
+        mainPanelTernary.repaint();
         ternaryPanel.repaint();
-//        baseTenPanel.repaint();
         this.requestFocus();
         this.repaint();
+
     }
 
     @Override
     public void requestFocus() {
-        mainPanel.requestFocus();
+        mainPanelTernary.requestFocus();
     }
 
 }
