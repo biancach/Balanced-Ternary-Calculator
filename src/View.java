@@ -50,7 +50,8 @@ public class View extends JFrame implements KeyListener, ActionListener  {
         ternaryPanel.add(equalPanel);
 
         JPanel convertPanel = new JPanel();
-        convertPanel.setLayout(new GridLayout(1, 2));
+        convertPanel.setLayout(new GridLayout(1, 1));
+//        convertPanel.setLayout(new GridLayout(1, 2));
         convertPanel.setBackground(Color.GRAY);
         ternaryPanel.add(convertPanel);
 
@@ -77,8 +78,8 @@ public class View extends JFrame implements KeyListener, ActionListener  {
 
         convertToBaseTen = new JButton("convert to base 10");
         convertPanel.add(convertToBaseTen);
-        convertToTernary = new JButton("convert to ternary");
-        convertPanel.add(convertToTernary);
+//        convertToTernary = new JButton("convert to ternary");
+//        convertPanel.add(convertToTernary);
 
         //final building parts
 
@@ -171,6 +172,7 @@ public class View extends JFrame implements KeyListener, ActionListener  {
         if (message.equals("")) {
             if (!firstTerm.equals("")) {
                 message = "" + firstTerm;
+                calculator.switchToBalancedTernary();
                 updateScreen();
                 message = "";
             }
@@ -228,6 +230,7 @@ public class View extends JFrame implements KeyListener, ActionListener  {
                 equals();
             } else if (command.equals("convert to base 10")) {
                 if (calculator.isBalancedTernary) {
+                    convertToBaseTen.setText("convert back to balanced ternary");
                     convertToBaseTen();
                 } else {
                     convertToBalancedTernary();
@@ -235,10 +238,11 @@ public class View extends JFrame implements KeyListener, ActionListener  {
 
             }
         } else {
-            if (command.equals("convert to base 10")) {
+            if (command.equals("convert back to balanced ternary")) {
                 if (calculator.isBalancedTernary) {
                     convertToBaseTen();
                 } else {
+                    convertToBaseTen.setText("convert to base 10");
                     convertToBalancedTernary();
                 }
             }
@@ -268,7 +272,7 @@ public class View extends JFrame implements KeyListener, ActionListener  {
         divide.addActionListener(listener);
         equal.addActionListener(listener);
         convertToBaseTen.addActionListener(listener);
-        convertToTernary.addActionListener(listener);
+//        convertToTernary.addActionListener(listener);
     }
 
     public void updateScreen() {

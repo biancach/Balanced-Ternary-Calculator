@@ -316,4 +316,7 @@ public class Calculator {
 
     }
 
+    public void switchToBalancedTernary() {
+        this.isBalancedTernary = true;
+    }
 }
